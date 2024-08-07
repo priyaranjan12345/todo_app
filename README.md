@@ -14,3 +14,9 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+
+steps to run:
+1. clone repository
+2. flutter clean
+3. flutter pub get
+4. ensure flutter version 3.22.x
