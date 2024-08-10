@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-
+import 'package:todo_app/core/router/app_router_observer.dart';
+import 'package:todo_app/features/home/home_page.dart';
 import 'package:todo_app/features/todo/presentation/bloc/todo_bloc/todo_bloc.dart';
-import 'package:todo_app/features/todo/presentation/pages/todo_pages/todo_page.dart';
 import 'package:todo_app/injection_container.dart';
 
-import '../../../mock/todo_bloc_mock.dart';
+import '../mock/todo_bloc_mock.dart';
 
 void main() {
-  late MockTodoBloc mockTodoBloc;
+   late MockTodoBloc mockTodoBloc;
 
   setUp(() {
     mockTodoBloc = MockTodoBloc();
@@ -31,9 +31,18 @@ void main() {
   
   group('TodoPage', () {
     testWidgets('renders TodoPage', (tester) async {
-      await tester.pumpWidget(const MaterialApp(home: TodoPage()));
+      await tester.pumpWidget(
+        MaterialApp.router(
+          routerConfig: appRouter.config(
+            navigatorObservers: () => [
+              AppRouterObserver(),
+            ],
+          ),
+        ),
+      );
+      
       await tester.pumpAndSettle();
-      expect(find.byType(TodoPage), findsOneWidget);
+      expect(find.byType(HomePage), findsOneWidget);
     });
   });
 }

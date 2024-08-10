@@ -14,7 +14,7 @@ void main() {
   late MockTodoBloc mockTodoBloc;
 
   group(
-    'description',
+    'renders TodoPage with empty todos',
     () {
       setUp(() {
         mockTodoBloc = MockTodoBloc();
