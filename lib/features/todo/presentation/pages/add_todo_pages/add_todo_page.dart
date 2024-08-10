@@ -14,7 +14,7 @@ class AddTodoPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add your doto'),
+        title: const Text('Add your todo'),
         centerTitle: true,
         elevation: 1,
       ),
