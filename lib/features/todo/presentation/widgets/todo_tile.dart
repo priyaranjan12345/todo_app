@@ -32,8 +32,9 @@ class TodoTile extends StatelessWidget {
         ),
         subtitle: Text(desc),
         trailing: IconButton(
+          splashRadius: 0.1,
           onPressed: onTapDelete,
-          icon: const Icon(Icons.delete),
+          icon: const Icon(Icons.delete_rounded),
         ),
       ),
     );

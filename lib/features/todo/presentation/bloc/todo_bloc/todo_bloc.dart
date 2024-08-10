@@ -1,3 +1,4 @@
+import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
@@ -9,18 +10,18 @@ import '../../../domain/repository/todo_repository.dart';
 part 'todo_event.dart';
 part 'todo_state.dart';
 
-class TodoBloc extends Bloc<TodoEvent, TodoStateModel> {
+class TodoBloc extends Bloc<TodoEvent, TodoState> {
   final TodoRepository repository;
 
-  TodoBloc({required this.repository}) : super(const TodoStateModel()) {
+  TodoBloc({required this.repository}) : super(const TodoState()) {
     on<GetTodosEvent>((event, emit) {
-      emit( state.copyWith(getTodoStatus: Status.loading));
+      emit(state.copyWith(getTodoStatus: Status.loading));
       final result = repository.getAllTodos();
       result.fold(
-        (l) => emit( state.copyWith(getTodoStatus: Status.error)),
+        (l) => emit(state.copyWith(getTodoStatus: Status.error)),
         (data) => emit(
           state.copyWith(
-            getTodoStatus: Status.loaded,
+            getTodoStatus: Status.success,
             todos: data.todos,
           ),
         ),
@@ -29,19 +30,17 @@ class TodoBloc extends Bloc<TodoEvent, TodoStateModel> {
     on<DeleteTodoEvent>(
       (event, emit) async {
         final result = await repository.deleteTodo(event.todo);
-        result.fold(
-          (l) => emit( state.copyWith(deleteTodoStatus: Status.error)),
-          (data) => add(GetTodosEvent()),
-        );
+        if (result is Right) {
+          add(GetTodosEvent());
+        }
       },
     );
     on<ToggleTodoCompletedEvent>(
       (event, emit) async {
         final result = await repository.toggleTodoComplete(event.todoId);
-        result.fold(
-          (l) => emit( state.copyWith(updateTodoStatus: Status.error)),
-          (data) => add(GetTodosEvent()),
-        );
+        if (result is Right) {
+          add(GetTodosEvent());
+        }
       },
     );
     on<FilterTodoEvent>(

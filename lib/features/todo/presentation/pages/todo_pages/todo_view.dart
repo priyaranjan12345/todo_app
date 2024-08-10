@@ -36,7 +36,7 @@ class TodoView extends StatelessWidget {
         children: [
           Align(
             alignment: Alignment.centerLeft,
-            child: BlocSelector<TodoBloc, TodoStateModel, TodoFilter>(
+            child: BlocSelector<TodoBloc, TodoState, TodoFilter>(
               selector: (state) {
                 return state.todoFilter;
               },
@@ -54,24 +54,19 @@ class TodoView extends StatelessWidget {
           ),
           const Divider(),
           Flexible(
-            child: BlocSelector<TodoBloc, TodoStateModel,
-                ({Status status, List<Todo> todos, TodoFilter todoFilter})>(
-              selector: (state) => (
-                status: state.getTodoStatus,
-                todos: state.todos ?? [],
-                todoFilter: state.todoFilter,
-              ),
+            child: BlocBuilder<TodoBloc, TodoState>(
               builder: (context, state) {
+                final todos = state.todos ?? [];
                 return switch (state.status) {
                   Status.initial || Status.loading => const Center(
                       child: CircularProgressIndicator(),
                     ),
-                  Status.loaded => (state.todos.isEmpty)
+                  Status.success => (todos.isEmpty)
                       ? const Center(child: Text('No todos'))
                       : TodoList(
                           todos: getFilteredTodo(
                             filter: state.todoFilter,
-                            todos: state.todos,
+                            todos: todos,
                           ),
                         ),
                   Status.error => const Center(
