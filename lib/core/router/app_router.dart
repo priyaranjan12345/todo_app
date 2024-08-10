@@ -1,5 +1,4 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter/material.dart';
 import 'package:todo_app/core/router/app_router.gr.dart';
 
 @AutoRouterConfig()
@@ -24,17 +23,6 @@ class AppRouter extends RootStackRouter {
               path: 'addTodo',
             ),
           ],
-        ),
-        CustomRoute(
-          page: ConfirmDialogRoute.page,
-          path: '/addTodoDialogRoute',
-          customRouteBuilder: <T>(context, child, AutoRoutePage<T> page) {
-            return DialogRoute(
-              context: context,
-              settings: page,
-              builder: (_) => child,
-            );
-          },
         ),
       ];
 }
