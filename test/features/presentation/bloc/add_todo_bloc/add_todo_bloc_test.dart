@@ -3,11 +3,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:todo_app/features/todo/data/model/todo_model.dart';
-import 'package:todo_app/features/todo/domain/repository/todo_repository.dart';
+
 import 'package:todo_app/features/todo/presentation/bloc/add_todo_bloc/add_todo_bloc.dart';
 
-// Create a Mock class for TodoRepository
-class MockTodoRepository extends Mock implements TodoRepository {}
+import '../../../mock/todo_repository_mock.dart';
 
 void main() {
   late MockTodoRepository mockRepository;
@@ -37,7 +36,8 @@ void main() {
     blocTest<AddTodoBloc, AddTodoState>(
       'emits [AddTodoLoading, AddTodoLoaded] when SaveEvent is added and repository call is successful',
       build: () {
-        when(() => mockRepository.addTodo(testTodo)).thenAnswer((_) async => const Right(true));
+        when(() => mockRepository.addTodo(testTodo))
+            .thenAnswer((_) async => const Right(true));
         return addTodoBloc;
       },
       act: (bloc) => bloc.add(const SaveEvent(todo: testTodo)),
@@ -53,7 +53,8 @@ void main() {
     blocTest<AddTodoBloc, AddTodoState>(
       'emits [AddTodoLoading, AddTodoError] when SaveEvent is added and repository call fails',
       build: () {
-        when(() => mockRepository.addTodo(testTodo)).thenThrow(Exception('Failed to add todo'));
+        when(() => mockRepository.addTodo(testTodo))
+            .thenThrow(Exception('Failed to add todo'));
         return addTodoBloc;
       },
       act: (bloc) => bloc.add(const SaveEvent(todo: testTodo)),
