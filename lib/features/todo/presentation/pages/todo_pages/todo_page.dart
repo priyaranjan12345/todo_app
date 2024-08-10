@@ -13,19 +13,33 @@ class TodoPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return BlocProvider<TodoBloc>(
+      create: (context) => injector()..add(GetTodosEvent()),
+      child: const TodoPageWrapper(),
+    );
+  }
+}
+
+class TodoPageWrapper extends StatelessWidget {
+  const TodoPageWrapper({super.key});
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Todos'),
         centerTitle: true,
         elevation: 0.5,
       ),
-      body: BlocProvider<TodoBloc>(
-        create: (context) => injector(),
-        child: const TodoView(),
-      ),
+      body: const TodoView(),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          context.router.navigate(const AddTodoRoute());
+        onPressed: () async {
+          final val = await context.router.push(const AddTodoRoute());
+          if (context.mounted) {
+            if (val != null && val as bool) {
+              context.read<TodoBloc>().add(GetTodosEvent());
+            }
+          }
         },
         icon: const Icon(Icons.add),
         label: const Text("Add"),

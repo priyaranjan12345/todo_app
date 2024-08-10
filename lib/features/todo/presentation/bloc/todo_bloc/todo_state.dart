@@ -1,15 +1,50 @@
 part of 'todo_bloc.dart';
 
-@immutable
-sealed class TodoState extends Equatable {
-  @override
-  List<Object?> get props => [];
+enum Status {
+  initial,
+  loading,
+  loaded,
+  error,
 }
 
-final class TodoInitial extends TodoState {}
+@immutable
+class TodoStateModel extends Equatable {
+  final List<Todo>? todos;
+  final Status getTodoStatus;
+  final Status updateTodoStatus;
+  final Status deleteTodoStatus;
+  final TodoFilter todoFilter;
 
-final class TodoLoading extends TodoState {}
+  const TodoStateModel({
+    this.todos,
+    this.getTodoStatus = Status.initial,
+    this.updateTodoStatus = Status.initial,
+    this.deleteTodoStatus = Status.initial,
+    this.todoFilter = TodoFilter.all,
+  });
 
-final class TodoLoaded extends TodoState {}
+  @override
+  List<Object?> get props => [
+        todos,
+        getTodoStatus,
+        updateTodoStatus,
+        deleteTodoStatus,
+        todoFilter,
+      ];
 
-final class TodoError extends TodoState {}
+  TodoStateModel copyWith({
+    List<Todo>? todos,
+    Status? getTodoStatus,
+    Status? updateTodoStatus,
+    Status? deleteTodoStatus,
+    TodoFilter? todoFilter,
+  }) {
+    return TodoStateModel(
+      todos: todos ?? this.todos,
+      getTodoStatus: getTodoStatus ?? this.getTodoStatus,
+      updateTodoStatus: updateTodoStatus ?? this.updateTodoStatus,
+      deleteTodoStatus: deleteTodoStatus ?? this.deleteTodoStatus,
+      todoFilter: todoFilter ?? this.todoFilter,
+    );
+  }
+}

@@ -1,5 +1,6 @@
 part of 'add_todo_bloc.dart';
 
+@immutable
 sealed class AddTodoEvent extends Equatable {
   const AddTodoEvent();
 
