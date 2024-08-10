@@ -24,7 +24,12 @@ class TodoTile extends StatelessWidget {
           value: isCompleted,
           onChanged: onChanged,
         ),
-        title: Text(title),
+        title: Text(
+          title,
+          style: TextStyle(
+            decoration: isCompleted ? TextDecoration.lineThrough : null,
+          ),
+        ),
         subtitle: Text(desc),
         trailing: IconButton(
           onPressed: onTapDelete,

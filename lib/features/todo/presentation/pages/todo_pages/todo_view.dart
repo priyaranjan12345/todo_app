@@ -10,23 +10,15 @@ import '../../bloc/todo_bloc/todo_bloc.dart';
 class TodoView extends StatelessWidget {
   const TodoView({super.key});
 
-  List<Todo> filteredTodo({
+  List<Todo> getFilteredTodo({
     required TodoFilter filter,
     required List<Todo> todos,
   }) {
     switch (filter) {
       case TodoFilter.completed:
-        return todos
-            .where(
-              (e) => e.isCompleted,
-            )
-            .toList();
+        return todos.where((e) => e.isCompleted).toList();
       case TodoFilter.pending:
-        return todos
-            .where(
-              (e) => !e.isCompleted,
-            )
-            .toList();
+        return todos.where((e) => !e.isCompleted).toList();
 
       default:
         return todos;
@@ -52,9 +44,9 @@ class TodoView extends StatelessWidget {
                 return TodoFilterChips(
                   todoFilter: state,
                   onSelected: (val) {
-                    context.read<TodoBloc>().add(
-                          FilterTodoEvent(todoFilter: val),
-                        );
+                    context
+                        .read<TodoBloc>()
+                        .add(FilterTodoEvent(todoFilter: val));
                   },
                 );
               },
@@ -75,11 +67,9 @@ class TodoView extends StatelessWidget {
                       child: CircularProgressIndicator(),
                     ),
                   Status.loaded => (state.todos.isEmpty)
-                      ? const Center(
-                          child: Text('No todos'),
-                        )
+                      ? const Center(child: Text('No todos'))
                       : TodoList(
-                          todos: filteredTodo(
+                          todos: getFilteredTodo(
                             filter: state.todoFilter,
                             todos: state.todos,
                           ),
@@ -116,14 +106,12 @@ class TodoList extends StatelessWidget {
           desc: todo.description,
           isCompleted: todo.isCompleted,
           onChanged: (p0) {
-            context.read<TodoBloc>()
-              ..add(ToggleTodoCompletedEvent(todoId: todo.id ?? ''))
-              ..add(GetTodosEvent());
+            context
+                .read<TodoBloc>()
+                .add(ToggleTodoCompletedEvent(todoId: todo.id ?? ''));
           },
           onTapDelete: () {
-            context.read<TodoBloc>()
-              ..add(DeleteTodoEvent(todo: todo))
-              ..add(GetTodosEvent());
+            context.read<TodoBloc>().add(DeleteTodoEvent(todo: todo));
           },
         );
       },

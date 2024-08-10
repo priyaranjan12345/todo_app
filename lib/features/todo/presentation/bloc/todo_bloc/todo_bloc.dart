@@ -14,12 +14,12 @@ class TodoBloc extends Bloc<TodoEvent, TodoStateModel> {
 
   TodoBloc({required this.repository}) : super(const TodoStateModel()) {
     on<GetTodosEvent>((event, emit) {
-      emit(const TodoStateModel(getTodoStatus: Status.loading));
+      emit( state.copyWith(getTodoStatus: Status.loading));
       final result = repository.getAllTodos();
       result.fold(
-        (l) => emit(const TodoStateModel(getTodoStatus: Status.error)),
+        (l) => emit( state.copyWith(getTodoStatus: Status.error)),
         (data) => emit(
-          TodoStateModel(
+          state.copyWith(
             getTodoStatus: Status.loaded,
             todos: data.todos,
           ),
@@ -27,12 +27,22 @@ class TodoBloc extends Bloc<TodoEvent, TodoStateModel> {
       );
     });
     on<DeleteTodoEvent>(
-      (event, emit) {
-        repository.deleteTodo(event.todo);
+      (event, emit) async {
+        final result = await repository.deleteTodo(event.todo);
+        result.fold(
+          (l) => emit( state.copyWith(deleteTodoStatus: Status.error)),
+          (data) => add(GetTodosEvent()),
+        );
       },
     );
     on<ToggleTodoCompletedEvent>(
-      (event, emit) => repository.toggleTodoComplete(event.todoId),
+      (event, emit) async {
+        final result = await repository.toggleTodoComplete(event.todoId);
+        result.fold(
+          (l) => emit( state.copyWith(updateTodoStatus: Status.error)),
+          (data) => add(GetTodosEvent()),
+        );
+      },
     );
     on<FilterTodoEvent>(
       (event, emit) {
