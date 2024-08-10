@@ -28,12 +28,12 @@ class TodoState extends Equatable {
 
   TodoState copyWith({
     List<Todo>? todos,
-    Status? getTodoStatus,
+    Status? status,
     TodoFilter? todoFilter,
   }) {
     return TodoState(
       todos: todos ?? this.todos,
-      status: getTodoStatus ?? this.status,
+      status: status ?? this.status,
       todoFilter: todoFilter ?? this.todoFilter,
     );
   }

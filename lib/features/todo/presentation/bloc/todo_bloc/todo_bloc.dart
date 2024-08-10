@@ -15,13 +15,13 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
 
   TodoBloc({required this.repository}) : super(const TodoState()) {
     on<GetTodosEvent>((event, emit) {
-      emit(state.copyWith(getTodoStatus: Status.loading));
+      emit(state.copyWith(status: Status.loading));
       final result = repository.getAllTodos();
       result.fold(
-        (l) => emit(state.copyWith(getTodoStatus: Status.error)),
+        (l) => emit(state.copyWith(status: Status.error)),
         (data) => emit(
           state.copyWith(
-            getTodoStatus: Status.success,
+            status: Status.success,
             todos: data.todos,
           ),
         ),
@@ -31,7 +31,7 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
       (event, emit) async {
         final result = await repository.deleteTodo(event.todo);
         if (result is Right) {
-          add(GetTodosEvent());
+          add(const GetTodosEvent());
         }
       },
     );
@@ -39,7 +39,7 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
       (event, emit) async {
         final result = await repository.toggleTodoComplete(event.todoId);
         if (result is Right) {
-          add(GetTodosEvent());
+          add(const GetTodosEvent());
         }
       },
     );

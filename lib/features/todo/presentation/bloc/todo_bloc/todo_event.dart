@@ -8,7 +8,12 @@ sealed class TodoEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-final class GetTodosEvent extends TodoEvent {}
+final class GetTodosEvent extends TodoEvent {
+  const GetTodosEvent() : super();
+
+  @override
+  List<Object?> get props => [];
+}
 
 final class ToggleTodoCompletedEvent extends TodoEvent {
   const ToggleTodoCompletedEvent({
@@ -16,6 +21,9 @@ final class ToggleTodoCompletedEvent extends TodoEvent {
   }) : super();
 
   final String todoId;
+
+  @override
+  List<Object?> get props => [todoId];
 }
 
 final class FilterTodoEvent extends TodoEvent {

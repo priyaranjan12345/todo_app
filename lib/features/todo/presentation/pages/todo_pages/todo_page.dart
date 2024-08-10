@@ -14,7 +14,7 @@ class TodoPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<TodoBloc>(
-      create: (context) => injector()..add(GetTodosEvent()),
+      create: (context) => injector<TodoBloc>()..add(GetTodosEvent()),
       child: const TodoPageWrapper(),
     );
   }
