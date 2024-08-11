@@ -74,7 +74,7 @@ class _AddTodoViewState extends State<AddTodoView> {
               maxLines: 4,
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Title is required';
+                  return 'Description is required';
                 }
 
                 return null;
