@@ -20,3 +20,8 @@ steps to run:
 2. flutter clean
 3. flutter pub get
 4. ensure flutter version 3.22.x
+
+### code coverage report
+![image](https://github.com/user-attachments/assets/1b9426ff-1641-46e5-957c-50ad9e0374fa)
+
+
