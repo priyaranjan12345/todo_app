@@ -10,16 +10,14 @@ import 'features/todo/presentation/bloc/todo_bloc/todo_bloc.dart';
 
 final injector = GetIt.instance;
 
-final appRouter = AppRouter();
-
 Future<void> init() async {
-  injector.registerLazySingleton(
-    () => appRouter,
-  );
-
   final sharedPreference = await SharedPreferences.getInstance();
   injector.registerLazySingleton(
     () => sharedPreference,
+  );
+
+  injector.registerLazySingleton<AppRouter>(
+    () => AppRouter(),
   );
 
   injector.registerLazySingleton<TodoLocalDatasource>(
@@ -43,5 +41,4 @@ Future<void> init() async {
       repository: injector(),
     ),
   );
-  
 }

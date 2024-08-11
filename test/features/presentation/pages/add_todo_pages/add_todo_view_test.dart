@@ -11,35 +11,71 @@ import '../../../mock/add_todo_bloc_mock.dart';
 void main() {
   late MockAddTodoBloc mockAddTodoBloc;
 
-  setUp(() {
-    mockAddTodoBloc = MockAddTodoBloc();
-    when(() => mockAddTodoBloc.stream).thenAnswer(
-      (invocation) => Stream.value(const AddTodoInitial()),
-    );
-    when(() => mockAddTodoBloc.state).thenAnswer(
-      (invocation) => const AddTodoInitial(),
-    );
-    injector.registerFactory<AddTodoBloc>(() => mockAddTodoBloc);
-  });
+  group('AddTodoPage renders correctly for initial state', () {
+    setUp(() {
+      mockAddTodoBloc = MockAddTodoBloc();
+      when(() => mockAddTodoBloc.stream).thenAnswer(
+        (invocation) => Stream.value(const AddTodoInitial()),
+      );
+      when(() => mockAddTodoBloc.state).thenAnswer(
+        (invocation) => const AddTodoInitial(),
+      );
+      injector.registerFactory<AddTodoBloc>(() => mockAddTodoBloc);
+    });
 
-  tearDown(() {
-    injector.reset();
-  });
+    tearDown(() {
+      injector.reset();
+    });
 
-  testWidgets('AddTodoPage renders correctly', (WidgetTester tester) async {
-    await tester.pumpWidget(
-      MaterialApp(
-        home: Scaffold(
-          body: BlocProvider.value(
-            value: injector<AddTodoBloc>(),
-            child: const AddTodoView(),
+    testWidgets('AddTodoPage renders correctly', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: BlocProvider.value(
+              value: injector<AddTodoBloc>(),
+              child: const AddTodoView(),
+            ),
           ),
         ),
-      ),
-    );
+      );
 
-    expect(find.byType(AddTodoView), findsOneWidget);
-    expect(find.byType(ElevatedButton), findsOneWidget);
-    expect(find.text('Add todo'), findsOneWidget);
+      expect(find.byType(AddTodoView), findsOneWidget);
+      expect(find.byType(ElevatedButton), findsOneWidget);
+      expect(find.text('Add todo'), findsOneWidget);
+    });
+  });
+
+  group('AddTodoPage renders correctly for error state', () {
+    setUp(() {
+      mockAddTodoBloc = MockAddTodoBloc();
+      when(() => mockAddTodoBloc.stream).thenAnswer(
+        (invocation) => Stream.value(const AddTodoError()),
+      );
+      when(() => mockAddTodoBloc.state).thenAnswer(
+        (invocation) => const AddTodoError(),
+      );
+      injector.registerFactory<AddTodoBloc>(() => mockAddTodoBloc);
+    });
+
+    tearDown(() {
+      injector.reset();
+    });
+
+    testWidgets('AddTodoPage renders correctly', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: BlocProvider.value(
+              value: injector<AddTodoBloc>(),
+              child: const AddTodoView(),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.byType(AddTodoView), findsOneWidget);
+      expect(find.byType(ElevatedButton), findsOneWidget);
+      expect(find.text('Retry'), findsOneWidget);
+    });
   });
 }
