@@ -13,12 +13,12 @@ class AddTodoBloc extends Bloc<AddTodoEvent, AddTodoState> {
   AddTodoBloc({required this.repository}) : super(const AddTodoInitial()) {
     on<SaveEvent>((event, emit) async {
       emit(const AddTodoLoading());
-      try {
-        await repository.addTodo(event.todo);
-        emit(const AddTodoLoaded());
-      } catch (e) {
-        emit(const AddTodoError());
-      }
+
+      final result = await repository.addTodo(event.todo);
+      result.fold(
+        (l) => emit(const AddTodoError()),
+        (r) => emit(const AddTodoLoaded()),
+      );
     });
   }
 }
